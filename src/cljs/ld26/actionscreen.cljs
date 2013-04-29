@@ -227,10 +227,15 @@
 
 (defn try-use-exit [screen pos]
   (let [exits (:exits screen)
+        items (:items screen)
         selected (first (filter #(inside-rectangle? (:position %)
                                                      pos (:image %))
-                                exits))]
-    (if (and (not (nil? selected)) (nil? (:combine-with selected)))
+                                exits))
+        selected-item (first (filter #(inside-rectangle? (:position %)
+                                                         pos (:image %))
+                                    items)) ]
+    (if (and (not (nil? selected)) (nil? (:combine-with selected))
+             (nil? selected-item))
       (use-exit screen selected)
        screen
     )
