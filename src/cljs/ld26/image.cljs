@@ -12,12 +12,18 @@
 (def *image-map* (atom {}))
 (def *font* "Arial")
 
+(declare load-image)
+(defn load-error [uri sym]
+  (load-image uri sym)
+)
+
 (defn load-image [uri sym]
   (let [image (js/Image. )]
     (set! (. image -onload)
           (fn []
             (swap! *image-map* assoc sym image)
           ))
+    (set! (. image -onerror) #(load-error uri sym))
     (set! (. image -src) uri)
   )
 )

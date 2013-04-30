@@ -5,6 +5,11 @@
 
 (def *bgm* (atom []))
 
+(declare load-sound)
+(defn load-error [uri sym]
+  (load-sound uri sym)
+)
+
 (defn load-sound [uri sym]
   (let [sound (js/Audio.)]
     (set! (. sound -loop) true)
@@ -13,6 +18,7 @@
          (doall (swap! *sound-map* assoc sym sound))
        )
     )
+    (set! (. sound -onerror) #(load-error uri sym))
     (set! (. sound -src) uri)
   )
 )
