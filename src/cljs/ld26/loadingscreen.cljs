@@ -86,11 +86,34 @@
 
 (def audio-list
   {
-   :beginning "sound/beginning.ogg"
-   :chromatic "sound/chromatic-simplicity.ogg"
-   :jumping "sound/jumping-rocks.ogg"
-   :wavy "sound/wavy-curves.ogg"
+   :beginning "sound/beginning"
+   :chromatic "sound/chromatic-simplicity"
+   :jumping "sound/jumping-rocks"
+   :wavy "sound/wavy-curves"
   }
+)
+
+(defn can-play? [type]
+  (not (empty? (. (js/Audio.) canPlayType type)))
+)
+
+(defn set-audio-extension [ext]
+  (set! audio-list (into {} 
+                         (for [[k v] audio-list]
+                              [k (str v ext)])
+                   )
+  )
+)
+
+(defn generate-audio-list []
+  (let [canplayogg (can-play? "audio/ogg; codecs=vorbis")
+        canplaymp3 (can-play? "audio/mpeg")]
+    (cond
+      canplayogg (set-audio-extension ".ogg")
+      canplaymp3 (set-audio-extension ".mp3")
+      :else (js/alert "Your browser does not seem to support the proper audio standards. The game will not work.")
+    )
+  )
 )
 
 (defn handle-input [screen mouse]
@@ -198,9 +221,10 @@
   )
 )
 
+
 (defn init [ctx canvas]
+  (generate-audio-list)
   (doseq [[k v] image-list] (gimage/load-image v k))
-  ;(doseq [[k v] audio-list] (gsound/load-sound v k))
   (-> gstate/*base-screen*
     (into {
            :id "LoadingScreen"
