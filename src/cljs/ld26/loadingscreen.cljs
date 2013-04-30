@@ -140,9 +140,18 @@
   )
 )
 
+(defn has-loaded? [num res-map]
+  (= num (count res-map))
+)
+
 (defn all-loaded? [imgcount sndcount]
-  (and (= imgcount (count @gimage/*image-map*))
-       (= sndcount (count @gsound/*sound-map*)))
+  (and (has-loaded? imgcount @gimage/*image-map*)
+       (has-loaded? sndcount @gsound/*sound-map*))
+)
+
+(defn load-sounds [screen]
+  (doseq [[k v] audio-list] (gsound/load-sound v k))
+  (assoc screen :loading-status 1)
 )
 
 (defn update [screen elapsed-time]
@@ -151,6 +160,10 @@
     (cond
       (:advance screen) (load-main-menu screen)
       (:complete screen) screen
+      (and (zero? (:loading-status screen))
+           (has-loaded? images
+                        @gimage/*image-map*))
+        (load-sounds screen)
       (all-loaded? images sounds) (everything-loaded screen)
       :else (assoc screen :percentage (percentage-loaded images sounds))
     )
@@ -187,7 +200,7 @@
 
 (defn init [ctx canvas]
   (doseq [[k v] image-list] (gimage/load-image v k))
-  (doseq [[k v] audio-list] (gsound/load-sound v k))
+  ;(doseq [[k v] audio-list] (gsound/load-sound v k))
   (-> gstate/*base-screen*
     (into {
            :id "LoadingScreen"
@@ -203,6 +216,7 @@
            :complete false
            :message "Loading..."
            :percentage 0
+           :loading-status 0 ; 0 = image, 1 = sound
           }
     )
   )
