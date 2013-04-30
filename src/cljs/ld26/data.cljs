@@ -49,7 +49,7 @@
       "There seems to be a signet of some sort on top of the bed."
       "\"hmm... I wonder what it's going to do on it.\"" ]
    :throne-speech
-    [ "At last, you reach the end of your journey. You sneakily enter the throne room, trying not to avoid too many eyes."
+    [ "At last, you reach the end of your journey. You sneakily enter the throne room, trying not to avoid too much attention."
       "As you advance inside, you soon realize there is nobody in here. No king nor queen. Peculiar. " ]
   }
 )
@@ -630,7 +630,7 @@
                    :background :transition-3
                    :messages ["I was an artist, once. Before dying."
                               "An accident took my life, I spent weeks in a life-threatening coma, and now I am gone."
-                              "During that period, I didn't exit. I just dreamed."
+                              "During that period, I didn't exist. I just dreamed."
                               "This is how I like to imagine it when we die. Just a dream, a big, funny dream."
                               "Sometimes weird, sometimes scary. Just a dream."
                               "And when it's time to leave, we leave content. We leave happy. Because after all..."
