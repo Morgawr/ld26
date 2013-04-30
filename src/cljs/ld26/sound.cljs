@@ -1,4 +1,6 @@
-(ns ld26.sound)
+(ns ld26.sound
+  (:require [goog.dom :as dom])
+)
 
 
 (def *sound-map* (atom {}))
@@ -7,7 +9,9 @@
 
 (declare load-sound)
 (defn load-error [uri sym]
-  (load-sound uri sym)
+  (let [window (dom/getWindow)]
+    (. window setTimeout #(load-sound uri sym) 200)
+  )
 )
 
 (defn load-sound [uri sym]

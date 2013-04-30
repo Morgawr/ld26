@@ -1,4 +1,6 @@
-(ns ld26.image)
+(ns ld26.image
+  (:require [goog.dom :as dom])
+)
 
 (defn clear-context [screen]
   (let [ctx (:context screen)
@@ -14,7 +16,9 @@
 
 (declare load-image)
 (defn load-error [uri sym]
-  (load-image uri sym)
+  (let [window (dom/getWindow)]
+    (. window setTimeout #(load-image uri sym) 200)
+  )
 )
 
 (defn load-image [uri sym]
